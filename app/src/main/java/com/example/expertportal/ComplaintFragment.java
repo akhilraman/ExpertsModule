@@ -38,6 +38,7 @@ public class ComplaintFragment extends Fragment {
     public static ArrayList arrayList;
     FirebaseDatabase rootNode;
     DatabaseReference reference;
+    public static CustomRow adapter;
 
     DatabaseReference referenceExpert;
 
@@ -100,10 +101,12 @@ public class ComplaintFragment extends Fragment {
 
         listview.setItemsCanFocus(false);
         arrayList = new ArrayList<Complaint>();
-        CustomRow adapter;
+
 
         adapter = new CustomRow(getContext(), arrayList);
         listview.setAdapter(adapter);
+
+
 
 
         //arrayList.add(new Complaint("123","this is title","akhil","19bce1564","ragging","rahul","registered"));
@@ -111,6 +114,7 @@ public class ComplaintFragment extends Fragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for(DataSnapshot dataSnapshot:snapshot.getChildren()){
+
                     Complaint complaint=dataSnapshot.getValue(Complaint.class);
 
                     FirebaseAuth firebaseAuth=FirebaseAuth.getInstance();

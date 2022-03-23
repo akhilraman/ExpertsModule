@@ -84,13 +84,17 @@ public class ComplaintDetailsFragment extends BottomSheetDialogFragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        rootNode = FirebaseDatabase.getInstance();
-        reference = rootNode.getReference("Complaints");
-        present.setStatus("Seen");
-        HashMap hashMap=new HashMap();
-        hashMap.put("status","Seen");
-         reference.child(present.complaintID).updateChildren(hashMap);
-        Log.i("this",reference.child("complaintID").child(present.complaintID).child("status").toString());
+        if(present.getStatus().equals("registered")){
+            ComplaintFragment.arrayList.clear();
+            rootNode = FirebaseDatabase.getInstance();
+            reference = rootNode.getReference("Complaints");
+            present.setStatus("Seen");
+            HashMap hashMap=new HashMap();
+            hashMap.put("status","Seen");
+            reference.child(present.complaintID).updateChildren(hashMap);
+            Log.i("this",reference.child("complaintID").child(present.complaintID).child("status").toString());
+        }
+
 
         TextView title=view.findViewById(R.id.details_title);
         title.setText(present.getTitle());
@@ -105,7 +109,7 @@ public class ComplaintDetailsFragment extends BottomSheetDialogFragment {
         incident.setText(present.getIncident_info());
 
         TextView ComplaintFrom=view.findViewById(R.id.complaintFrom);
-        ComplaintFrom.setText(present.getComplaintFrom());
+        ComplaintFrom.setText(present.getComplaintFrom().getName());
 
         TextView status=view.findViewById(R.id.details_status);
         status.setText(present.getStatus().toUpperCase(Locale.ROOT));
@@ -113,7 +117,8 @@ public class ComplaintDetailsFragment extends BottomSheetDialogFragment {
         TextView expert=view.findViewById(R.id.details_expert);
         expert.setText("Complaint handled by "+present.getExpert().getName());
 
-        //ComplaintFragment.arrayList.clear();
+
+        ComplaintFragment.adapter.notifyDataSetChanged();
 
 
 
