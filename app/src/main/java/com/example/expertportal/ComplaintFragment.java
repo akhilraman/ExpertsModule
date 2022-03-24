@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -93,6 +94,8 @@ public class ComplaintFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        final ProgressBar simpleProgressBar = (ProgressBar) view.findViewById(R.id.progressBar);
+
         rootNode = FirebaseDatabase.getInstance();
         reference = rootNode.getReference("Complaints");
 
@@ -105,18 +108,18 @@ public class ComplaintFragment extends Fragment {
 
         adapter = new CustomRow(getContext(), arrayList);
         listview.setAdapter(adapter);
-
-
+        simpleProgressBar.setVisibility(View.VISIBLE);
 
 
         //arrayList.add(new Complaint("123","this is title","akhil","19bce1564","ragging","rahul","registered"));
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if(!arrayList.isEmpty()){
+                    arrayList.clear();
+                }
                 for(DataSnapshot dataSnapshot:snapshot.getChildren()){
-
                     Complaint complaint=dataSnapshot.getValue(Complaint.class);
-
                     FirebaseAuth firebaseAuth=FirebaseAuth.getInstance();
 
                     Log.i("value",firebaseAuth.getCurrentUser().getEmail());
@@ -126,6 +129,7 @@ public class ComplaintFragment extends Fragment {
                     }
                 }
                 adapter.notifyDataSetChanged();
+                simpleProgressBar.setVisibility(View.INVISIBLE);
             }
             @Override
             public void onCancelled(@NonNull DatabaseError error) {

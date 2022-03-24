@@ -5,7 +5,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -26,6 +30,10 @@ import java.util.Locale;
 public class ComplaintDetailsFragment extends BottomSheetDialogFragment {
     FirebaseDatabase rootNode;
     DatabaseReference reference;
+
+    String[] items =  {"Under investigation","Reviewing complaint","Investigation complete","Case Closed"};
+    AutoCompleteTextView autoCompleteTxt;
+    ArrayAdapter<String> adapterItems;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -85,7 +93,7 @@ public class ComplaintDetailsFragment extends BottomSheetDialogFragment {
         super.onViewCreated(view, savedInstanceState);
 
         if(present.getStatus().equals("registered")){
-            ComplaintFragment.arrayList.clear();
+
             rootNode = FirebaseDatabase.getInstance();
             reference = rootNode.getReference("Complaints");
             present.setStatus("Seen");
@@ -93,6 +101,7 @@ public class ComplaintDetailsFragment extends BottomSheetDialogFragment {
             hashMap.put("status","Seen");
             reference.child(present.complaintID).updateChildren(hashMap);
             Log.i("this",reference.child("complaintID").child(present.complaintID).child("status").toString());
+
         }
 
 
@@ -114,11 +123,32 @@ public class ComplaintDetailsFragment extends BottomSheetDialogFragment {
         TextView status=view.findViewById(R.id.details_status);
         status.setText(present.getStatus().toUpperCase(Locale.ROOT));
 
-        TextView expert=view.findViewById(R.id.details_expert);
-        expert.setText("Complaint handled by "+present.getExpert().getName());
+
+        autoCompleteTxt = view.findViewById(R.id.auto_complete_txt);
+
+        adapterItems = new ArrayAdapter<String>(getContext(),R.layout.list_item,items);
+        autoCompleteTxt.setAdapter(adapterItems);
+
+        autoCompleteTxt.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                String item = parent.getItemAtPosition(position).toString();
+                rootNode = FirebaseDatabase.getInstance();
+                reference = rootNode.getReference("Complaints");
+                present.setStatus(item);
+                HashMap hashMap=new HashMap();
+                hashMap.put("status",item);
+                reference.child(present.complaintID).updateChildren(hashMap);
+                Log.i("this",reference.child("complaintID").child(present.complaintID).child("status").toString());
+
+                status.setText(present.getStatus().toUpperCase(Locale.ROOT));
+
+                //Toast.makeText(getContext(),"Item: "+item,Toast.LENGTH_SHORT).show();
+            }
+        });
 
 
-        ComplaintFragment.adapter.notifyDataSetChanged();
+
 
 
 

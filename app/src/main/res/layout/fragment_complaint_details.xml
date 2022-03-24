@@ -7,7 +7,7 @@
 
     <LinearLayout
         android:layout_width="409dp"
-        android:layout_height="452dp"
+        android:layout_height="487dp"
         android:orientation="vertical"
         tools:layout_editor_absoluteX="1dp"
         tools:layout_editor_absoluteY="1dp">
@@ -97,7 +97,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="124dp"
+            android:layout_height="79dp"
             android:orientation="horizontal">
 
             <TextView
@@ -112,7 +112,7 @@
             <TextView
                 android:id="@+id/details_info"
                 android:layout_width="96dp"
-                android:layout_height="122dp"
+                android:layout_height="73dp"
                 android:layout_weight="1"
                 android:text="TextView"
                 android:textAlignment="center"
@@ -121,7 +121,27 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="87dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                android:hint="Update Status">
+
+                <AutoCompleteTextView
+                    android:id="@+id/auto_complete_txt"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="none" />
+            </com.google.android.material.textfield.TextInputLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="49dp"
             android:orientation="vertical">
 
             <TextView
@@ -136,14 +156,6 @@
                 android:textSize="24sp"
                 android:textStyle="bold" />
 
-            <TextView
-                android:id="@+id/details_expert"
-                android:layout_width="match_parent"
-                android:layout_height="34dp"
-                android:background="#DF29422A"
-                android:text="Complaint handled by "
-                android:textAlignment="center"
-                android:textColor="#F6F6F6" />
         </LinearLayout>
 
 
